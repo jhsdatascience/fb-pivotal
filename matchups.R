@@ -18,10 +18,6 @@ get_weekly_totals <- function(league) {
     llply(league, function(x) ddply(x, .(week), batter_totals))
 }
 
-get_nweeks <- function(df) {
-    max(df$week)
-}
-
 get_opponent_totals <- function(weekly_totals, matchups) {
     ## Match opponent totals to team totals (by week)
     opponent_totals <- weekly_totals
@@ -42,3 +38,4 @@ calculate_wins <- function(team_weekly_totals, team_opponent_totals) {
     ties <- sum(team_stats == opp_stats)
     c(wins, losses, ties)
 }
+
