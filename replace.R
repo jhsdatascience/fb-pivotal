@@ -18,8 +18,7 @@ replace_player <- function(player, roster) {
 replace_player_daily_stats <- function(week) {
     names_ind <- names(week) %in% batter_fields$raw
     for (i in 1:7) {
-        r <- week[i,]
-        if (all(!is.na(r[names_ind]))) week[i,names_ind] <- replacement_player
+        if (all(!is.na(week[i,names_ind]))) week[i,names_ind] <- replacement_player
     }
     week
 }

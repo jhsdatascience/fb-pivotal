@@ -27,6 +27,10 @@ get_stat <- function(long_name) {
     batter_fields[batter_fields$desc == long_name,][1]$stat
 }
 
+get_stat_desc <- function(stat) {
+    batter_fields[batter_fields$stat == stat,][3]$desc
+}
+
 load_all <- function(base_dir = 'data') {
     batters <<- load_batters(paste(base_dir, 'batters.csv', sep = '/'))
     batter_fields <<- load_batter_fields(paste(base_dir, 'batter_fields.csv', sep = '/'))
