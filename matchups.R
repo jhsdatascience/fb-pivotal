@@ -30,12 +30,23 @@ get_opponent_totals <- function(weekly_totals, matchups) {
     opponent_totals
 }
 
-calculate_wins <- function(team_weekly_totals, team_opponent_totals) {
+calculate_record <- function(team_weekly_totals, team_opponent_totals) {
     team_stats <- team_weekly_totals[, unique(batter_fields$stat)]
     opp_stats <- team_opponent_totals[, unique(batter_fields$stat)]
     wins <- sum(team_stats > opp_stats)
     losses <- sum(team_stats < opp_stats)
     ties <- sum(team_stats == opp_stats)
-    c(wins, losses, ties)
+    wlt <- c(wins = wins, losses = losses, ties = ties)
+    record <- wlt %*% c(1,0, .5) / sum(wlt)
+    wlt <- data.frame(t(wlt))
+    cbind(wlt, record)
 }
 
+calculate_records <- function(weekly_totals, opponent_totals) {
+    df <-  data.frame(matrix(vector(), 0, length(unique(batter_fields$stat)), dimnames = list(c(), unique(batter_fields$stat))))
+    for (team in names(weekly_totals)) {
+        df <- rbind(df, calculate_record(weekly_totals[[team]], opponent_totals[[team]]))
+    }
+    row.names(df) <- names(weekly_totals)
+    df
+}

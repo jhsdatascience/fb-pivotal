@@ -1,4 +1,5 @@
 library(plyr)
+library(ggplot2)
 source('load.R')
 source('matchups.R')
 source('replace.R')
@@ -8,7 +9,6 @@ load_all('data/')
 
 weekly_totals <- get_weekly_totals(batters)
 opponent_totals <- get_opponent_totals(weekly_totals, matchups)
-wlt <- plot_matchups('R', weekly_totals[[1]], opponent_totals[[1]])
 
 team1 <- batters$`1`
 team_weekly_totals <- weekly_totals[[1]]

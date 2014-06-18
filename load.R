@@ -31,10 +31,23 @@ get_stat_desc <- function(stat) {
     batter_fields[batter_fields$stat == stat,][3]$desc
 }
 
+get_roster <- function(team) {
+    as.character(unique(batters[[team]]$player))
+}
+
+get_team_by_id <- function(team_id) {
+    teams[teams$id == team_id,]$team
+}
+
+get_rosters <- function() {
+    dlply(teams, .(id), function(x) {get_roster(x$id)})
+}
+
 load_all <- function(base_dir = 'data') {
     batters <<- load_batters(paste(base_dir, 'batters.csv', sep = '/'))
     batter_fields <<- load_batter_fields(paste(base_dir, 'batter_fields.csv', sep = '/'))
     matchups <<- load_matchups(paste(base_dir, 'matchups.csv', sep = '/'))
     teams <<- load_teams(paste(base_dir, 'teams.csv', sep = '/'))
     nweeks <<- get_nweeks(batters[[1]])
+    rosters <<- get_rosters()
 }
