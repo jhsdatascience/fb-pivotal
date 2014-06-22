@@ -1,5 +1,8 @@
 library(RColorBrewer)
-plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals, replaced_totals = NULL) {
+plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals,
+                          replaced_totals = NULL,
+                          player_to_replace = NULL,
+                          roster = NULL) {
     stat_long <- get_stat_desc(stat)
     home <- rep('Home', nrow(team_weekly_totals))
     away <- rep('Away', nrow(team_opponent_totals))
@@ -10,6 +13,10 @@ plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals, replac
         df <- cbind(df, home_away)
         df$.id <- factor(df$.id, levels=c('Team', 'Opponent'), labels = c('Team', 'Opponent'))
     } else {
+        active_during_week <- sapply(split(roster, roster$week), function(x) any(x$player == player_to_replace))
+        replaced_totals[!active_during_week, ] <- ddply(replaced_totals[!active_during_week,],
+                                                        .(week),
+                                                        function(x) rep(NA, ncol(x) - 1 ))
         df <- ldply(list(Team = team_weekly_totals,
                          'Team with replacement level player' = replaced_totals,
                          Opponent = team_opponent_totals))

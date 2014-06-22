@@ -23,6 +23,9 @@ replace_player_daily_stats <- function(week) {
     week
 }
 
+#d_ply(roster, .(week), function(x) print(any(x$player == player)))
+# sapply(split(roster, roster$week), function(x) any(x$player == player))
+
 get_weekly_totals_with_replacement_player <- function(team, player_to_replace) {
     ddply(replace_player(player_to_replace, team), .(week), batter_totals)
 }

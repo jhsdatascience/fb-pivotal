@@ -31,7 +31,10 @@ shinyServer(function(input, output) {
     output$matchupPlot <- renderPlot({
         team <- input$team
         stat <- input$category
-        print(plot_matchups(stat, weekly_totals[[team]], opponent_totals[[team]], replaced_totals()))
+        print(plot_matchups(stat, weekly_totals[[team]], opponent_totals[[team]],
+                            replaced_totals(),
+                            selected_player(),
+                            batters[[team]]))
     })
     
     output$standings <- renderTable({
@@ -56,6 +59,14 @@ shinyServer(function(input, output) {
             is_selected <- FALSE
         }
         is_selected
+    })
+    
+    selected_player <- reactive({
+        if(is_player_selected()) {
+            player <- input$player
+        } else {
+            player <- NULL
+        }
     })
     
 })

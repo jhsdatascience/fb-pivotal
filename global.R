@@ -1,9 +1,9 @@
 library(plyr)
 library(ggplot2)
-source('load.R')
-source('matchups.R')
-source('replace.R')
-source('plots.R')
+source('lib/load.R')
+source('lib/matchups.R')
+source('lib/replace.R')
+source('lib/plots.R')
 load_all('data')
 weekly_totals <<- get_weekly_totals(batters)
 opponent_totals <<- get_opponent_totals(weekly_totals, matchups)
@@ -16,4 +16,4 @@ names(team_choices) <- teams$team
 category_choices <- as.list(batter_fields$stat)
 names(category_choices) <- batter_fields$desc
 
-rosters <- get_rosters()
+rosters <<- get_rosters()
