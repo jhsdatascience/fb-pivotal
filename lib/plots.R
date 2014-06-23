@@ -1,9 +1,10 @@
 library(RColorBrewer)
-plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals,
+plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals, team,
                           replaced_totals = NULL,
                           player_to_replace = NULL,
                           roster = NULL) {
     stat_long <- get_stat_desc(stat)
+    team_name <- get_team_by_id(team)
     home <- rep('Home', nrow(team_weekly_totals))
     away <- rep('Away', nrow(team_opponent_totals))
     if (is.null(replaced_totals)) {
@@ -35,11 +36,12 @@ plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals,
 #                              breaks = legend_breaks) +
         guides(linetype = FALSE) +
 #        scale_color_brewer(type = 'qual') +
-        theme_bw() + 
+        theme_bw() +
         theme(legend.position="bottom",
               legend.title=element_blank()) +
         #guide_legend(nrow = 2, ncol = 2) +
         labs(x = 'Week',
              y = stat_long,
+             title = paste0(stat_long, ' per week for ', team_name),
              color = 'Team')
 }

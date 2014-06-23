@@ -7,7 +7,6 @@ source('lib/plots.R')
 load_all('data')
 weekly_totals <<- get_weekly_totals(batters)
 opponent_totals <<- get_opponent_totals(weekly_totals, matchups)
-replacement_player <<- calc_replacement_player_stats(batters)
 
 league_standings <<- calculate_records(weekly_totals, opponent_totals)
 

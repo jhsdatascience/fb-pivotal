@@ -1,46 +1,51 @@
 library(shiny)
 
 shinyServer(function(input, output) {
-    
+
+    replacement_player <- reactive({
+        calc_replacement_player_stats(batters, input$replacement_quantile)
+    })
+
     output$playerSelect <- renderUI({
-        selectInput('player', 'Player',
+        team_name <- get_team_by_id(input$team)
+        selectInput('player', paste0(team_name,"'s Roster:"),
                     choices = c('---None---', rosters[[input$team]]))
     })
-    
+
     replaced_totals <- reactive({
         if (is_player_selected()) {
-            replaced_totals <- get_weekly_totals_with_replacement_player(batters[[input$team]], input$player)
+            replaced_totals <- get_weekly_totals_with_replacement_player(batters[[input$team]], input$player, replacement_player())
         } else {
             replaced_totals <- NULL
         }
     })
-    
+
     standings <- reactive({
         standings <- league_standings[input$team,]
         if (is_player_selected()) {
             standings <- rbind(standings, calculate_record(replaced_totals(),
                                                            opponent_totals[[input$team]]))
-            row.names(standings) <- c("Current standings",
-                                      paste0("Standings without ", input$player))
+            row.names(standings) <- c("Actual record",
+                                      paste0("Record without ", input$player))
         } else {
-            row.names(standings) <- c("Current standings")
+            row.names(standings) <- c("Record")
         }
         standings
     })
-    
+
     output$matchupPlot <- renderPlot({
         team <- input$team
         stat <- input$category
-        print(plot_matchups(stat, weekly_totals[[team]], opponent_totals[[team]],
+        print(plot_matchups(stat, weekly_totals[[team]], opponent_totals[[team]], team,
                             replaced_totals(),
                             selected_player(),
                             batters[[team]]))
     })
-    
+
     output$standings <- renderTable({
         standings()
     })
-    
+
     output$fwar <- renderText({
         if (is_player_selected()) {
             standings_ <- standings()
@@ -51,7 +56,7 @@ shinyServer(function(input, output) {
         }
         out
     })
-    
+
     is_player_selected <- reactive({
         if (!is.null(input$player)) {
             is_selected <- input$player != '---None---'
@@ -60,7 +65,7 @@ shinyServer(function(input, output) {
         }
         is_selected
     })
-    
+
     selected_player <- reactive({
         if(is_player_selected()) {
             player <- input$player
@@ -68,5 +73,5 @@ shinyServer(function(input, output) {
             player <- NULL
         }
     })
-    
+
 })

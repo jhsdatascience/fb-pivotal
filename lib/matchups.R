@@ -37,9 +37,9 @@ calculate_record <- function(team_weekly_totals, team_opponent_totals) {
     losses <- sum(team_stats < opp_stats)
     ties <- sum(team_stats == opp_stats)
     wlt <- c(wins = wins, losses = losses, ties = ties)
-    record <- wlt %*% c(1,0, .5) / sum(wlt)
+    win_percentage <- wlt %*% c(1,0, .5) / sum(wlt)
     wlt <- data.frame(t(wlt))
-    cbind(wlt, record)
+    cbind(wlt, win_percentage)
 }
 
 calculate_records <- function(weekly_totals, opponent_totals) {
