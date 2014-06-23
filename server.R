@@ -50,11 +50,28 @@ shinyServer(function(input, output) {
         if (is_player_selected()) {
             standings_ <- standings()
             fwar <- standings_[1,1] - standings_[2,1] + .5 * (standings_[1,3] - standings_[2,3])
-            out <- paste(input$player, 'has been worth ', fwar, 'win(s) above replacement this season.')
+            out <- paste0(input$player,
+                         ' has been pivotal in ',
+                         fwar,
+                         ' win(s) this season. Calculated using a player in the ',
+                         input$replacement_quantile,
+                         'th quantile as his replacement.')
         } else {
             out <- "Choose a player from the roster on the left to calculate their value this season."
         }
         out
+    })
+
+    output$dailydata <- renderDataTable({
+        ldply(batters)
+    })
+
+    output$weeklydata <- renderDataTable({
+        ldply(weekly_totals)
+    })
+
+    output$teams <- renderDataTable({
+        teams
     })
 
     is_player_selected <- reactive({

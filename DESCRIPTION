@@ -1,7 +1,7 @@
-Title: Batter FWAR
+Title: Fantasy Baseball Player Values
 License: MIT
 Author: jhsdatascience
-AuthorUrl: http://www.github.com/jhsdatascience
+AuthorUrl: https://github.com/jhsdatascience/fb-pivotal
 Tags: baseball, fantasy, WAR, pivotal value
 DisplayMode: Showcase
 Type: Shiny
