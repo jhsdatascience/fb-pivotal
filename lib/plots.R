@@ -7,6 +7,7 @@ plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals, team,
     team_name <- get_team_by_id(team)
     home <- rep('Home', nrow(team_weekly_totals))
     away <- rep('Away', nrow(team_opponent_totals))
+    plot_title <- paste0(stat_long, ' per week for ', team_name)
     if (is.null(replaced_totals)) {
         df <- ldply(list(Team = team_weekly_totals,
                          Opponent = team_opponent_totals))
@@ -25,6 +26,7 @@ plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals, team,
         df <- cbind(df, home_away)
         df$.id <- factor(df$.id, levels=c('Team', 'Team with replacement level player', 'Opponent'),
                          labels = c('Team', 'Team with replacement level player', 'Opponent'))
+        plot_title <- paste(plot_title, 'sans', player_to_replace)
     }
     group_colors <- brewer.pal(3, 'Paired')
     names(group_colors) <- c('Team', 'Team with replacement level player', 'Opponent')
@@ -42,6 +44,6 @@ plot_matchups <- function(stat, team_weekly_totals, team_opponent_totals, team,
         #guide_legend(nrow = 2, ncol = 2) +
         labs(x = 'Week',
              y = stat_long,
-             title = paste0(stat_long, ' per week for ', team_name),
+             title = plot_title,
              color = 'Team')
 }
